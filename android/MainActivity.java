@@ -37,41 +37,19 @@ public class MainActivity extends Activity {
     private TextView userName;
     private String userNameString="";
     private String userIDString="default";
-    private DataSnapshot healthData;
+    private String medicine="";
+    private String company="";
+    private String dosage="";
     private int Interval;
     private int Offset;
 
-    private PendingIntent pendingIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
-
-        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-        pendingIntent =PendingIntent.getBroadcast(MainActivity.this,0,alarmIntent,0);
-
-        findViewById(R.id.startAlarm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start();
-            }
-        });
-
-        findViewById(R.id.stopAlarm).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
-
-        findViewById(R.id.stopAlarmAt10).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAt10();
-            }
-        });
 
         userID = (EditText) findViewById(R.id.user);
         userName = (TextView) findViewById(R.id.userName);
@@ -102,46 +80,20 @@ public class MainActivity extends Activity {
     }
 
     public void start() {
-        /*AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        //int interval = 8000;
-        int interval= 10000;
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000, pendingIntent);
-        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();*/
-        //Create an offset from the current time in which the alarm will go off.
         Calendar cal = Calendar.getInstance();
-       // cal.add(Calendar.SECOND, 5);
-
         //Create a new PendingIntent and add it to the AlarmManager
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
                 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager am =
-                (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),10000,
+        AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),Interval*1000,
                 pendingIntent);
     }
-
-    public void cancel() {
+    /*public void cancel() {
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
         Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
-    }
-
-    public void startAt10() {
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        //int interval = 1000 * 60 * 60 * Interval;
-        int interval= 10000;
-        /* Set the alarm to start at 10:30 AM */
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, Offset);
-        calendar.set(Calendar.MINUTE, 0);
-
-        /* Repeating on every 20 minutes interval */
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                interval, pendingIntent);
-    }
-
+    }*/
     public void homePageView() throws Exception{
         //display some text to indicate logged in
         userIDString = userID.getText().toString().trim();
@@ -153,6 +105,11 @@ public class MainActivity extends Activity {
 
             public void onDataChange(DataSnapshot snapshot) {
                 userNameString = snapshot.child("name").getValue().toString();
+                Interval = Integer.parseInt(snapshot.child("plans/0/interval").getValue().toString());
+                Offset = Integer.parseInt(snapshot.child("plans/0/offset").getValue().toString());
+                medicine=snapshot.child("plans/0/med/name").getValue().toString();
+                dosage=snapshot.child("plans/0/dose").getValue().toString();
+                company=snapshot.child("plans/0/med/manufacturer").getValue().toString();
                 System.out.println(userNameString);
                 userID.setVisibility(View.GONE);
                 userID.setText("");
@@ -164,6 +121,7 @@ public class MainActivity extends Activity {
                 userName.setVisibility(View.VISIBLE);
                 System.out.println("hello world"+userNameString);
                 //createAlarm();
+                start();
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -171,11 +129,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-    //current codeo only handles one prescription
-    /*public void createAlarm(){
-        Calendar alarm = Calendar.getInstance();
-        alarm.add(Offset,Interval);
-    }*/
     public void logInView(){
         userID.setVisibility(View.VISIBLE);
         userID.setEnabled(true);
