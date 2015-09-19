@@ -129,7 +129,7 @@
   						</div>
 						<div class="col-sm-6">
 							<label for="dose">Dosage:</label>
-							<input type="text" ng-model="selected.text" class="form-control" id="text">
+							<input type="text" ng-model="selected.dose" class="form-control" id="text">
 						</div>
 					</div>
 					<div class="row">
