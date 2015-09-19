@@ -15,6 +15,9 @@ Route::group(['prefix' => 'api'], function () {
     Route::resource('plans', 'PlanController'); 
     Route::resource('meds', 'MedController'); 
 });
+Route::get("/", function() {
+    return view("index");
+});
 Route::get('/test', function () {   
     run()->getWaitHandle()->join();
 });
