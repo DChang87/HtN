@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -17,9 +19,12 @@ public class MainActivity extends ActionBarActivity {
     private Button sendUserID;
     private Button logOutButton;
     private TextView userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
+        final Firebase rootRef = new Firebase("https://docs-examples.firebaseio.com/web/data/users/mchen/name");
         setContentView(R.layout.activity_main);
         userID = (EditText) findViewById(R.id.user);
         sendUserID = (Button) findViewById(R.id.sendUser);
@@ -27,7 +32,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //obtain data and check
-                userName.setText("User Name: "+userID.getText().toString());
+                //userName.setText("User Name: "+userID.getText().toString());
+                userName.setText("User Name: "+rootRef);
                 homePageView();
             }
         };
