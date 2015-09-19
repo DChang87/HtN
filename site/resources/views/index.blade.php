@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="indexApp">
 <head>
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
 	
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-resource.js"></script>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -28,8 +29,22 @@
         	//$("#div2").fadeIn("slow");
         	//$("#div3").fadeIn(3000);
 		});
+		var myApp = angular.module('indexApp', ['ngResource']).config(['$interpolateProvider', function($interpolateProvider){
+			$interpolateProvider.startSymbol('[[').endSymbol(']]');
+		}]);
+		
+		myApp.controller('mainController', ['$scope', '$resource', function($scope, $resource){
+			var Patient = $resource('./api/patients/:id',
+				{id:'@id'}, {
+			});
+			$scope.patients = [];
+			var results = Patient.query(function(){
+				$scope.patients = results;
+			});
+		}]);
 	</script>
-	
+</head>
+<body ng-controller="mainController">
 	<nav class="navbar navbar-default">
   		<div class="container-fluid">
     		<div class="navbar-header">
@@ -96,26 +111,28 @@
     		</div>
   		</div>
 	</div>
-</head>
-<body>
 	<div class="container">
 		<button id = "absolute" type="button" class="btn btn-round btn-success" style="float:right" data-toggle="modal" data-target="#add-patient"> + </button>
 		<div id="header">
 			<h1 align="center">SmartMeds Patient List</h1>
 			<table class="table table-hover">
 				<thead>
-					<th>Name</th>	
-					<th>Age</th>
-					<th>Identifier</th>
-					<th>Plans</th>
-					<th>Actions</th>
+					<tr>
+						<th>Name</th>	
+						<th>Age</th>
+						<th>Identifier</th>
+						<th>Plans</th>
+						<th>Actions</th>
+					</tr>
 				</thead>
 				<tbody>
-					<td>Kevin Pei</td>
-					<td>23</td>
-					<td>kevin-pei-1</td>
-					<td>5</td>
-					<td><a href="javascript:void(0);" class="text-primary">Edit</a>&nbsp;|&nbsp;<a href="javascript:void(0);" class="text-danger">Delete</a></td>
+					<tr ng-repeat="patient in patients">
+						<td>[[patient.name]]</td>
+						<td>[[patient.age]]</td>
+						<td>[[patient.uid]]</td>
+						<td>[[patient.plans.length]]</td>
+						<td><a href="javascript:void(0);" class="text-primary">Edit</a>&nbsp;|&nbsp;<a href="javascript:void(0);" class="text-danger">Delete</a></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
