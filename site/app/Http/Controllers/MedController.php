@@ -86,9 +86,15 @@ class MedController extends Controller
     public function destroy($id)
     {
         Med::destroy($id);
+        $ids = [];
         foreach(Plan::where('med_id', $id)->get() as $plan){
+            foreach(DB::table('patient_plan')->where('plan_id', $plan->id)->get() as $cur){
+               array_push($ids, $cur->patient_id);
+            }
             DB::table('patient_plan')->where('plan_id', $plan->id)->delete();
             Plan::destroy($plan->id);
         }
+        var_dump($ids);
+        PatientController::sync($ids);
     }
 }

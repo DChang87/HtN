@@ -89,7 +89,12 @@ class PlanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
-        DB::table('plan_id')->where('plan_id', $id)->delete();
+        $ids = [];
+        foreach(DB::table('patient_plan')->where('plan_id', $id)->get() as $cur){
+            array_push($ids, $cur->patient-id);
+        }
+        DB::table('patient_plan')->where('plan_id', $id)->delete();
+        PatientController::sync($ids);
         return Plan::destroy($id);
     }
 }

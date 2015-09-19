@@ -24,24 +24,14 @@ class PatientController extends Controller
     public static function sync($arr){
         $DEFAULT_URL = 'https://radiant-torch-4965.firebaseio.com/';
         $DEFAULT_TOKEN = '9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV';
-        $DEFAULT_PATH = '/test';
+        $DEFAULT_PATH = '/users';
         
         $firebase = new \Firebase\FirebaseLib($DEFAULT_URL, $DEFAULT_TOKEN);
+        $output  = [];
+        foreach(Patient::whereIn('id', $arr)->with('plans')->get() as $patient){
+            $firebase->set($DEFAULT_PATH . '/'.$patient->uid, $patient->toArray());
+        }
         
-        // --- storing an array ---
-        $test = array(
-            "foo" => "bar",
-            "i_love" => "lamp",
-            "id" => 42
-        );
-        $dateTime = new DateTime();
-        $firebase->set($DEFAULT_PATH . '/' . $dateTime->format('c'), $test);
-        
-        // --- storing a string ---
-        $firebase->set($DEFAULT_PATH . '/name/contact001', "John Doe");
-        
-        // --- reading the stored string ---
-        $name = $firebase->get($DEFAULT_PATH . '/name/contact001');
     }
 
     /**
@@ -72,6 +62,7 @@ class PatientController extends Controller
         }
         $patient = Patient::find($patient->id);
         $patient->plans;
+        PatientController::sync([$patient->id]);
         return $patient;
     }
 
@@ -118,6 +109,7 @@ class PatientController extends Controller
         }
         $patient = Patient::find($patient->id);
         $patient->plans;
+        PatientController::sync([$patient->id]);
         return $patient;
     }
 
@@ -130,5 +122,6 @@ class PatientController extends Controller
     public function destroy($id)
     {
         Patient::destroy($id);
+        PatientController::sync([$patient->id]);
     }
 }
