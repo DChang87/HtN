@@ -18,7 +18,7 @@ Route::group(['prefix' => 'api'], function () {
 });
 Route::get('/test', function () {
     
-    $fb = Firebase::initialize("https://radiant-torch-4965.firebaseio.com/", "9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV");
+    $fb = Firebase::initialize("http://radiant-torch-4965.firebaseio.com", "9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV");
  
     //retrieve a node
     $nodeGetContent = $fb->get('/node/path');
