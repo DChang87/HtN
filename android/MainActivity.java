@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -37,7 +38,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
-
 
         userID = (EditText) findViewById(R.id.user);
         userName = (TextView) findViewById(R.id.userName);
@@ -69,7 +69,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void homePageView() throws Exception{
         //display some text to indicate logged in
-        userIDString = userID.getText().toString();
+        userIDString = userID.getText().toString().trim();
+        System.out.println(userIDString+"userIDString");
         Firebase ref = new Firebase("https://radiant-torch-4965.firebaseio.com/users/"+userIDString);
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -77,25 +78,23 @@ public class MainActivity extends ActionBarActivity {
 
             public void onDataChange(DataSnapshot snapshot) {
                 healthData = snapshot;
-
-                userNameString = healthData.child("name").toString();
+                userNameString = healthData.child("name").getValue().toString();
                 System.out.println(userNameString);
+                userID.setVisibility(View.GONE);
+                userID.setText("");
+                userID.setEnabled(false);
+                userID.setClickable(false);
+                sendUserID.setVisibility(View.GONE);
+                logOutButton.setVisibility(View.VISIBLE);
+                userName.setText(userNameString);
+                userName.setVisibility(View.VISIBLE);
+                System.out.println("hello world"+userNameString);
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
-
-        userID.setVisibility(View.GONE);
-        userID.setText("");
-        userID.setEnabled(false);
-        userID.setClickable(false);
-        sendUserID.setVisibility(View.GONE);
-        logOutButton.setVisibility(View.VISIBLE);
-
-        userName.setVisibility(View.VISIBLE);
-        userName.setText(userNameString);
     }
     public void logInView(){
         userID.setVisibility(View.VISIBLE);
