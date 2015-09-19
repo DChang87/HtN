@@ -5,6 +5,16 @@
 header{
 	display: inline-block;	
 }
-absolute{
-	display: absolute;
+html,body{
+	height:100%;
+}
+.container{
+	position:relative;
+	background:#FFF;
+	border-radius:5px;
+}
+#absolute{
+	position: fixed;
+	top:100px;
+	right:10px;
 }

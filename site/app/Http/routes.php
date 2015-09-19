@@ -21,6 +21,9 @@ Route::get("/", function() {
 Route::get("/plans", function() {
     return view("plans");
 });
+Route::get("/meds", function() {
+    return view("meds");
+});
 Route::get('/test', function () {   
     run()->getWaitHandle()->join();
 });

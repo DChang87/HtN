@@ -72,7 +72,7 @@ class MedController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $med = Med::find($id)->fill($request-input());
+        $med = Med::find($id)->fill($request->input());
         $med->save();
         return $med;
     }
