@@ -139,8 +139,8 @@
   						</div>
 						<div class="col-sm-6">
 							<label for="med_id">Medication:</label>
-							<select id="med_id" ng-repeat="med in meds" ng-model="$parent.selected.med_id" class="form-control">
-								<option value="[[med.id]]">[[med.name]] by [[med.manufacturer]]</option>
+							<select id="med_id" ng-model="selected.med_id" class="form-control">
+								<option value="[[med.id]]"  ng-repeat="med in meds">[[med.name]] by [[med.manufacturer]]</option>
 							</select>
 						</div>
 					</div>

@@ -154,9 +154,9 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<label for="add">Add Plan:</label>
-							<select id="add" ng-repeat="plan in plans" ng-model="$parent.selectedplan" class="form-control">
-								<option value="[[plan.id]]">[[plan.name]]</option>
-							</select><br/>
+							<select id="add" ng-model="selectedplan" class="form-control">
+								<option value="[[plan.id]]" ng-repeat="plan in plans">[[plan.name]]</option>
+							</select><br/> 
 							<button class="btn btn-info" ng-click="pushPlan(selectedplan)">Add Plan</button>
 						</div>
 					</div>
