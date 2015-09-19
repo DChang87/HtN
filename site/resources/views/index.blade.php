@@ -56,17 +56,12 @@
       			</div>
       			<div class="modal-body">
         			<!-- Forms -->
-					<form class="form-inline" role="form">
+					<form role="form">
 						<div class="form-group">
-    						<label for="firstname">First Name:</label>
-    						<input type="text" class="form-control" id="firstname">
-  						</div>
-						<div class="form-group">
-    						<label for="lastname">Last Name:</label>
-    						<input type="text" class="form-control" id="lastname">
+    						<label for="name">Name:</label>
+    						<input type="text" class="form-control" id="name">
   						</div>
 					</form>
-					<br> <!-- For spacing -->
 					<form role="form">
 						<div class="form-group">
     						<label for="uniqueid">Unique ID:</label>
@@ -89,7 +84,6 @@
 </head>
 <body>
 	<div style="display: relative">
-		<button id = "absolute" type="button" class="btn btn-round btn-info btn-danger" style="float:right">  -  </button>
 		<button id = "absolute" type="button" class="btn btn-round btn-success" style="float:right" data-toggle="modal" data-target="#add-patient"> + </button>
 		<div id="header">
 			<h1 align="center">SmartMeds Patient List</h1>
