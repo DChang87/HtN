@@ -56,24 +56,32 @@
       			</div>
       			<div class="modal-body">
         			<!-- Forms -->
-					<form role="form">
+					<form class="form-inline" role="form">
 						<div class="form-group">
     						<label for="name">Name:</label>
     						<input type="text" class="form-control" id="name">
   						</div>
+						<div class="form-group">
+							<label for="age">Age:</label>
+							<input type="text" class="form-control" id="age">
+						</div>
 					</form>
+					<!-- Temporary <br> for spacing issues -->
+					<br>	
 					<form role="form">
 						<div class="form-group">
     						<label for="uniqueid">Unique ID:</label>
     						<input type="text" class="form-control" id="uniqueid">
   						</div>
-					</form>
-					<form role="form">
 						<div class="form-group">
     						<label for="medicine">Medicine Prescribed:</label>
     						<input type="text" class="form-control" id="medicine">
   						</div>
-					</form>	
+						<div class="form-group">
+							<label for="presplan">Prescription Plan:</label>
+							<input type="text" class="form-control" id = "presplan">
+						</div>
+					</form>
      			</div>
       			<div class="modal-footer">
         			<button type="button" class="btn btn-success" data-dismiss="modal">Save Changes</button>
