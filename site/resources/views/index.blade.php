@@ -36,11 +36,60 @@
 		myApp.controller('mainController', ['$scope', '$resource', function($scope, $resource){
 			var Patient = $resource('./api/patients/:id',
 				{id:'@id'}, {
+  				'update': { method:'PUT' }	
 			});
+			$scope.selected = {
+				plans: []
+			};
+			$scope.empty = {
+				plans: [],
+				name: '',
+				uid: '',
+				id: -1,
+				age: null
+			}
+			window.scope = $scope;
+			var plans = $resource('./api/plans').query(function(){
+				$scope.plans = plans;
+			})
 			$scope.patients = [];
-			var results = Patient.query(function(){
-				$scope.patients = results;
-			});
+			function reload(){
+				var results = Patient.query(function(){
+					$scope.patients = results;
+				});
+			}
+			$scope.pushPlan = function(idx){
+				idx = Number(idx);
+				$.each(plans, function(key, val){
+					if(val.id == idx) $scope.selected.plans.push(val);
+				});
+			}
+			$scope.emptySelected = function(){
+				$scope.selected = $.extend({}, $scope.empty);
+				$('#add-patient').modal('show');	
+			};
+			$scope.edit = function(val){
+				$scope.selected = $.extend({}, val);
+				$('#add-patient').modal('show');
+			}
+			$scope.delete = function(val){
+				new Patient(val).$delete().then(reload);
+			}
+			$scope.save = function(){
+				var trueSelected = [];
+				$.each($scope.selected.plans, function(key, val){
+					trueSelected.push(val.id);
+				});
+				$scope.selected.plans = trueSelected;
+				if($scope.selected.id == -1){
+					$scope.selected.id=null;
+					new Patient($scope.selected).$save().then(reload);
+				}else{
+					new Patient($scope.selected).$update().then(reload);
+				}
+				$('#add-patient').modal('hide');
+			};
+			reload();
 		}]);
 	</script>
 </head>
@@ -73,11 +122,11 @@
 					<div class="row">
 						<div class="col-sm-6">
     						<label for="name">Name:</label>
-    						<input type="text" class="form-control" id="name">
+    						<input type="text" ng-model="selected.name" class="form-control" id="name">
   						</div>
 						<div class="col-sm-6">
 							<label for="age">Age:</label>
-							<input type="text" class="form-control" id="age">
+							<input type="number" ng-model="selected.age" class="form-control" id="age">
 						</div>
 					</div>
 					<!-- Temporary <br> for spacing issues -->
@@ -85,34 +134,36 @@
 					<div class="row">
 						<div class="col-sm-12">
     						<label for="uniqueid">Unique ID:</label>
-    						<input type="text" class="form-control" id="uniqueid">
+    						<input type="text" ng-model="selected.uid" class="form-control" id="uniqueid">
   						</div>
-					</div><br/>
+					</div>
+					<hr/>
 					<div class="row">
 						<div class="col-sm-12">
-							<div class="alert alert-primary alert-dismissible" role="alert">
+							<div class="alert alert-primary alert-dismissible" ng-repeat="plan in selected.plans" role="alert">
 								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<strong>Oxytocin Plan A</strong>
+								<strong>[[plan.med.name]]</strong> by [[plan.med.manufacturer]]
 							</div>
 						</div>
-					</div><br/>
+					</div><br ng-if="selected.plans.length"/>
 					<div class="row">
 						<div class="col-sm-12">
 							<label for="add">Add Plan:</label>
-							<select id="add">
-								<option name="id">Plan 1</option>
-							</select>
+							<select id="add" ng-repeat="plan in plans" ng-model="$parent.selectedplan" class="form-control">
+								<option value="[[plan.id]]">[[plan.name]]</option>
+							</select><br/>
+							<button class="btn btn-default" ng-click="pushPlan(selectedplan)">Add Plan</button>
 						</div>
 					</div>
      			</div>
       			<div class="modal-footer">
-        			<button type="button" class="btn btn-success" data-dismiss="modal">Save Changes</button>
+        			<button type="button" class="btn btn-success" ng-click="save()">Save Changes</button>
       			</div>
     		</div>
   		</div>
 	</div>
 	<div class="container">
-		<button id = "absolute" type="button" class="btn btn-round btn-success" style="float:right" data-toggle="modal" data-target="#add-patient"> + </button>
+		<button id = "absolute" type="button" class="btn btn-round btn-success" style="float:right" ng-click="emptySelected()"> + </button>
 		<div id="header">
 			<h1 align="center">SmartMeds Patient List</h1>
 			<table class="table table-hover">
@@ -131,7 +182,7 @@
 						<td>[[patient.age]]</td>
 						<td>[[patient.uid]]</td>
 						<td>[[patient.plans.length]]</td>
-						<td><a href="javascript:void(0);" class="text-primary">Edit</a>&nbsp;|&nbsp;<a href="javascript:void(0);" class="text-danger">Delete</a></td>
+						<td><a href="javascript:void(0);" class="text-primary" ng-click="edit(patient)">Edit</a>&nbsp;|&nbsp;<a href="javascript:void(0);" class="text-danger" ng-click="delete(patient)">Delete</a></td>
 					</tr>
 				</tbody>
 			</table>

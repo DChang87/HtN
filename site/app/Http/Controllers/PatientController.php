@@ -122,6 +122,6 @@ class PatientController extends Controller
     public function destroy($id)
     {
         Patient::destroy($id);
-        PatientController::sync([$patient->id]);
+        PatientController::sync([$id]);
     }
 }
