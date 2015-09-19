@@ -1,4 +1,4 @@
-<?php
+<?hh
 
 namespace App\Http\Controllers;
 
@@ -21,7 +21,7 @@ class PatientController extends Controller
         return Patient::with('plans')->get();
     }
 
-    public static function sync($arr){
+    public static async function sync($arr) : void{
         $DEFAULT_URL = 'https://radiant-torch-4965.firebaseio.com/';
         $DEFAULT_TOKEN = '9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV';
         $DEFAULT_PATH = '/users';
