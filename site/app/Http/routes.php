@@ -1,5 +1,5 @@
 <?php
-
+ini_set('default_socket_timeout',2);
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -16,22 +16,21 @@ Route::group(['prefix' => 'api'], function () {
     Route::resource('plans', 'PlanController'); 
     Route::resource('meds', 'MedController'); 
 });
-Route::get('/test', function () {
-    
-    $fb = Firebase::initialize("http://radiant-torch-4965.firebaseio.com", "9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV");
- 
+Route::get('/test', function () {   
+    $fb = Firebase::initialize("https://radiant-torch-4965.firebaseio.com", "9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV");
+//	print_r($fb);
     //retrieve a node
-    $nodeGetContent = $fb->get('/node/path');
+    echo $fb->get('/test');
     
     //set the content of a node
-    $nodeSetContent = $fb->set('/node/path', array('data' => 'toset'));
+    //$nodeSetContent = $fb->set('/test', array('data' => 'toset'));
     
     //update the content of a node
-    $nodeUpdateContent = $fb->update('/node/path', array('data' => 'toupdate'));
+    //$nodeUpdateContent = $fb->update('/test', array('data' => 'toupdate'));
     
     //delete a node
-    $nodeDeleteContent = $fb->delete('/node/path');
+    //$nodeDeleteContent = $fb->delete('/test');
     
     //push a new item to a node
-    $nodePushContent = $fb->push('/node/path', array('name' => 'item on list'));
+    //$nodePushContent = $fb->push('/test', array('name' => 'item on list'));
 });
