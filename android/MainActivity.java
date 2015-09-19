@@ -9,11 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -24,23 +31,13 @@ public class MainActivity extends ActionBarActivity {
 
     private TextView userName;
     private String userNameString="";
+    private String userIDString="default";
+    private DataSnapshot healthData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
-        Firebase ref = new Firebase("https://radiant-torch-4965.firebaseio.com/users/kevin-pei-1");
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                userNameString = snapshot.child("name").getValue().toString();
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
 
         userID = (EditText) findViewById(R.id.user);
         userName = (TextView) findViewById(R.id.userName);
@@ -49,7 +46,11 @@ public class MainActivity extends ActionBarActivity {
         View.OnClickListener sendUserListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homePageView();
+                try {
+                    homePageView();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
         sendUserID.setOnClickListener(sendUserListener);
@@ -66,17 +67,34 @@ public class MainActivity extends ActionBarActivity {
         logInView();
     }
 
-    public void homePageView(){
+    public void homePageView() throws Exception{
         //display some text to indicate logged in
-        userID.setVisibility(View.GONE);
-        userID.setText("");
-        userID.setEnabled(false);
-        userID.setClickable(false);
-        sendUserID.setVisibility(View.GONE);
-        logOutButton.setVisibility(View.VISIBLE);
+        userIDString = userID.getText().toString().trim();
+        System.out.println(userIDString+"userIDString");
+        Firebase ref = new Firebase("https://radiant-torch-4965.firebaseio.com/users/"+userIDString);
 
-        userName.setVisibility(View.VISIBLE);
-        userName.setText(userNameString);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+
+            public void onDataChange(DataSnapshot snapshot) {
+                healthData = snapshot;
+                userNameString = healthData.child("name").getValue().toString();
+                System.out.println(userNameString);
+                userID.setVisibility(View.GONE);
+                userID.setText("");
+                userID.setEnabled(false);
+                userID.setClickable(false);
+                sendUserID.setVisibility(View.GONE);
+                logOutButton.setVisibility(View.VISIBLE);
+                userName.setText(userNameString);
+                userName.setVisibility(View.VISIBLE);
+                System.out.println("hello world"+userNameString);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
     }
     public void logInView(){
         userID.setVisibility(View.VISIBLE);
@@ -109,11 +127,3 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-/*
-public class Patient{
-    private String Name;
-    private String MedName;
-    private String Manufacturer;
-    private int Interval;
-    private int Offset;
-}*/
