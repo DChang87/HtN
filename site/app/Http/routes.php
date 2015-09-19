@@ -10,7 +10,11 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+Route::group(['prefix' => 'api'], function () {
+    Route::resource('patients', 'PatientController'); 
+    Route::resource('plans', 'PlanController'); 
+    Route::resource('meds', 'MedController'); 
+});
 Route::get('/', function () {
     return view('welcome');
 });
