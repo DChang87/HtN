@@ -18,6 +18,9 @@ Route::group(['prefix' => 'api'], function () {
 Route::get("/", function() {
     return view("index");
 });
+Route::get("/plans", function() {
+    return view("plans");
+});
 Route::get('/test', function () {   
     run()->getWaitHandle()->join();
 });
