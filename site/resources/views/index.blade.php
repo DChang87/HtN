@@ -37,10 +37,9 @@
     		</div>
     		<div>
       			<ul class="nav navbar-nav navbar-right">
-        			<li class="active"><a href="#">Dashboard</a></li>
-        			<li style="color:green"><a href="#">Page 1</a></li>
-        			<li><a href="#">Page 2</a></li> 
-        			<li><a href="#">Page 3</a></li> 
+        			<li class="active"><a href="./">Patients</a></li>
+        			<li><a href="./plans">Plans</a></li>
+        			<li><a href="#">Page 2</a></li>
       			</ul>
     		</div>
   		</div>
@@ -56,32 +55,40 @@
       			</div>
       			<div class="modal-body">
         			<!-- Forms -->
-					<form class="form-inline" role="form">
-						<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6">
     						<label for="name">Name:</label>
     						<input type="text" class="form-control" id="name">
   						</div>
-						<div class="form-group">
+						<div class="col-sm-6">
 							<label for="age">Age:</label>
 							<input type="text" class="form-control" id="age">
 						</div>
-					</form>
+					</div>
 					<!-- Temporary <br> for spacing issues -->
 					<br>	
-					<form role="form">
-						<div class="form-group">
+					<div class="row">
+						<div class="col-sm-12">
     						<label for="uniqueid">Unique ID:</label>
     						<input type="text" class="form-control" id="uniqueid">
   						</div>
-						<div class="form-group">
-    						<label for="medicine">Medicine Prescribed:</label>
-    						<input type="text" class="form-control" id="medicine">
-  						</div>
-						<div class="form-group">
-							<label for="presplan">Prescription Plan:</label>
-							<input type="text" class="form-control" id = "presplan">
+					</div><br/>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="alert alert-primary alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<strong>Oxytocin Plan A</strong>
+							</div>
 						</div>
-					</form>
+					</div><br/>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="add">Add Plan:</label>
+							<select id="add">
+								<option name="id">Plan 1</option>
+							</select>
+						</div>
+					</div>
      			</div>
       			<div class="modal-footer">
         			<button type="button" class="btn btn-success" data-dismiss="modal">Save Changes</button>
@@ -95,6 +102,20 @@
 		<button id = "absolute" type="button" class="btn btn-round btn-success" style="float:right" data-toggle="modal" data-target="#add-patient"> + </button>
 		<div id="header">
 			<h1 align="center">SmartMeds Patient List</h1>
+			<table class="table table-hover">
+				<thead>
+					<th>Name</th>	
+					<th>Age</th>
+					<th>Identifier</th>
+					<th>Plans</th>
+				</thead>
+				<tbody>
+					<td>Kevin Pei</td>
+					<td>23</td>
+					<td>kevin-pei-1</td>
+					<td>5</td>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </body>

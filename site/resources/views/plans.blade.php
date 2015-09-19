@@ -37,7 +37,7 @@
     		</div>
     		<div>
       			<ul class="nav navbar-nav navbar-right">
-        			<li><a href="./">Dashboard</a></li>
+        			<li><a href="./">Patients</a></li>
         			<li class="active"><a href="./plans">Plans</a></li>
         			<li><a href="#">Page 2</a></li> 
       			</ul>
