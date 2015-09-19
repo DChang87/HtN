@@ -32,11 +32,14 @@ async function hello(): Awaitable<void> {
   // --- reading the stored string ---
   $name = $firebase->get($DEFAULT_PATH . '/name/contact001');
 }
+async function run(): Awaitable<void> {
+  await hello();
+}
 Route::group(['prefix' => 'api'], function () {
     Route::resource('patients', 'PatientController'); 
     Route::resource('plans', 'PlanController'); 
     Route::resource('meds', 'MedController'); 
 });
 Route::get('/test', function () {   
-    hello();
+    run()->getWaitHandle()->join();
 });
