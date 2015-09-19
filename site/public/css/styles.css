@@ -18,3 +18,11 @@ html,body{
 	top:100px;
 	right:10px;
 }
+.navbar.navbar, .navbar-default.navbar{
+	background:#f11717!important;
+}
+.navbar img{
+	height:100%;
+	display:inline-block;
+	margin-right:10px;
+}

@@ -84,7 +84,7 @@
 	<nav class="navbar navbar-default">
   		<div class="container-fluid">
     		<div class="navbar-header">
-      			<a class="navbar-brand" href="#">SmartMeds™</a>
+      			<a class="navbar-brand" href="#"><img src="img/logo.png" />SmartMeds™</a>
     		</div>
     		<div>
       			<ul class="nav navbar-nav navbar-right">
