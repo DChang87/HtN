@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SmartMeds</string>
+    <string name="send">Send</string>
+    <string name="action_settings">Settings</string>
+    <string name="enterUserID">Enter User ID</string>
+    <string name="logOutS">Log Out</string>
+    <string name="userNameS">User Name</string>
+</resources>
