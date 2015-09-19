@@ -98,7 +98,7 @@
 	</div>
 </head>
 <body>
-	<div style="display: relative">
+	<div class="container">
 		<button id = "absolute" type="button" class="btn btn-round btn-success" style="float:right" data-toggle="modal" data-target="#add-patient"> + </button>
 		<div id="header">
 			<h1 align="center">SmartMeds Patient List</h1>
@@ -108,12 +108,14 @@
 					<th>Age</th>
 					<th>Identifier</th>
 					<th>Plans</th>
+					<th>Actions</th>
 				</thead>
 				<tbody>
 					<td>Kevin Pei</td>
 					<td>23</td>
 					<td>kevin-pei-1</td>
 					<td>5</td>
+					<td><a href="javascript:void(0);" class="text-primary">Edit</a>&nbsp;|&nbsp;<a href="javascript:void(0);" class="text-danger">Delete</a></td>
 				</tbody>
 			</table>
 		</div>
