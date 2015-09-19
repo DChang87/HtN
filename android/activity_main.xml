@@ -23,17 +23,16 @@
         android:text = "@string/send"
     />
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/userNameID"
-        android:text = "@string/userNameS"
-        />
+        android:id="@+id/userName"
+    />
     <Button
         android:id="@+id/logOut"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userNameID"
+        android:layout_below="@+id/userName"
         android:text = "@string/logOutS"
-        />
+    />
 
 </RelativeLayout>
