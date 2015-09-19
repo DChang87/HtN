@@ -10,27 +10,33 @@ ini_set('default_socket_timeout',2);
 | and give it the controller to call when that URI is requested.
 |
 */
-    use Firebase\Firebase;
+async function hello(): Awaitable<void> {
+  $DEFAULT_URL = 'https://radiant-torch-4965.firebaseio.com/';
+  $DEFAULT_TOKEN = '9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV';
+  $DEFAULT_PATH = '/test';
+  
+  $firebase = new \Firebase\FirebaseLib($DEFAULT_URL, $DEFAULT_TOKEN);
+  
+  // --- storing an array ---
+  $test = array(
+      "foo" => "bar",
+      "i_love" => "lamp",
+      "id" => 42
+  );
+  $dateTime = new DateTime();
+  $firebase->set($DEFAULT_PATH . '/' . $dateTime->format('c'), $test);
+  
+  // --- storing a string ---
+  $firebase->set($DEFAULT_PATH . '/name/contact001', "John Doe");
+  
+  // --- reading the stored string ---
+  $name = $firebase->get($DEFAULT_PATH . '/name/contact001');
+}
 Route::group(['prefix' => 'api'], function () {
     Route::resource('patients', 'PatientController'); 
     Route::resource('plans', 'PlanController'); 
     Route::resource('meds', 'MedController'); 
 });
 Route::get('/test', function () {   
-    $fb = Firebase::initialize("https://radiant-torch-4965.firebaseio.com", "9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV");
-//	print_r($fb);
-    //retrieve a node
-    echo $fb->get('/test');
-    
-    //set the content of a node
-    //$nodeSetContent = $fb->set('/test', array('data' => 'toset'));
-    
-    //update the content of a node
-    //$nodeUpdateContent = $fb->update('/test', array('data' => 'toupdate'));
-    
-    //delete a node
-    //$nodeDeleteContent = $fb->delete('/test');
-    
-    //push a new item to a node
-    //$nodePushContent = $fb->push('/test', array('name' => 'item on list'));
+    hello();
 });

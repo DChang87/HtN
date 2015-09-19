@@ -21,6 +21,29 @@ class PatientController extends Controller
         return Patient::with('plans')->get();
     }
 
+    public static function sync($arr){
+        $DEFAULT_URL = 'https://radiant-torch-4965.firebaseio.com/';
+        $DEFAULT_TOKEN = '9eIWuCjiQUrC98ZtbTPH3tUeYbGznRi0vMGOnSmV';
+        $DEFAULT_PATH = '/test';
+        
+        $firebase = new \Firebase\FirebaseLib($DEFAULT_URL, $DEFAULT_TOKEN);
+        
+        // --- storing an array ---
+        $test = array(
+            "foo" => "bar",
+            "i_love" => "lamp",
+            "id" => 42
+        );
+        $dateTime = new DateTime();
+        $firebase->set($DEFAULT_PATH . '/' . $dateTime->format('c'), $test);
+        
+        // --- storing a string ---
+        $firebase->set($DEFAULT_PATH . '/name/contact001', "John Doe");
+        
+        // --- reading the stored string ---
+        $name = $firebase->get($DEFAULT_PATH . '/name/contact001');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
