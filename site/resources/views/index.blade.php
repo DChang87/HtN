@@ -170,7 +170,7 @@
 	<div class="container shadow-z-2">
 		<button class="btn btn-fab btn-raised btn-primary" id="absolute" ng-click="emptySelected()"><i class="mdi-content-add"></i></button>
 		<div id="header">
-			<h1 align="center">Patient List</h1>
+			<h1 align="center">Patients</h1>
 			<table class="table table-hover">
 				<thead>
 					<tr>
