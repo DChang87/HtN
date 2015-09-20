@@ -76,6 +76,10 @@ class PatientController extends Controller
     {
         return Patient::find($id);
     }
+    public function uid($id)
+    {
+        return Patient::where('uid', $id)->with('plans')->first();
+    }
 
     /**
      * Show the form for editing the specified resource.

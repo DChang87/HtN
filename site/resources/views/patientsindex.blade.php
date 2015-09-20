@@ -16,6 +16,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-resource.js"></script>
 	<!-- Latest compiled and minified CSS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 	<!-- Optional theme -->
@@ -28,73 +29,39 @@
 	
 	<!-- Let's start loading headers -->
 	<script>
-		$(document).ready(function(){
-       		$("#header").fadeIn(2000);
-        	//$("#div2").fadeIn("slow");
-        	//$("#div3").fadeIn(3000);
-		});
 		var myApp = angular.module('indexApp', ['ngResource']).config(['$interpolateProvider', function($interpolateProvider){
 			$interpolateProvider.startSymbol('[[').endSymbol(']]');
 		}]);
 		
 		myApp.controller('mainController', ['$scope', '$resource', function($scope, $resource){
-			var Patient = $resource('./api/patients/:id',
-				{id:'@id'}, {
-  				'update': { method:'PUT' }	
-			});
-			$scope.selected = {
-				plans: []
-			};
-			$scope.empty = {
-				plans: [],
-				name: '',
-				uid: '',
-				id: -1,
-				age: null
-			}
 			window.scope = $scope;
-			var plans = $resource('./api/plans').query(function(){
-				$scope.plans = plans;
-			})
-			$scope.patients = [];
-			function reload(){
-				var results = Patient.query(function(){
-					$scope.patients = results;
+			$scope.data = {};
+			$scope.dates = [];
+			$scope.login = false;
+			$scope.signin = function(){
+				$.getJSON('./api/patients/uid/'+$('#uniqueid').val(), function(data){
+					$scope.data =  data;
+					$.each(data.plans, function(key, val){
+						var start = moment(val.created_at).add(val.offset, 'h'); //add offset hours to created_at
+						for(var i = 0; i < val.repeats; i++){
+							if(start.unix() < moment().unix() || start.unix() - moment().unix() > 604800) return;
+							$scope.dates.push({
+								name: val.name,
+								timestamp: start.unix(),
+								date: start.format('ddd MMM D @ H:mmA'),
+								med: $.extend({}, val.med),
+								dose: val.dose
+							});
+							start = start.add(val.interval, 'h');
+						}
+					});
+					$scope.dates.sort(function(a, b) {
+						return a.timestamp - b.timestamp;
+					});
+					$scope.login = true;
+					$scope.$apply();
 				});
 			}
-			$scope.pushPlan = function(idx){
-				idx = Number(idx);
-				$.each(plans, function(key, val){
-					if(val.id == idx) $scope.selected.plans.push(val);
-				});
-			}
-			$scope.emptySelected = function(){
-				$scope.selected = $.extend({}, $scope.empty);
-				$('#add-patient').modal('show');	
-			};
-			$scope.edit = function(val){
-				$scope.selected = $.extend({}, val);
-				$('#add-patient').modal('show');
-			}
-			$scope.delete = function(val){
-				if(!confirm('Are you sure')) return;
-				new Patient(val).$delete().then(reload);
-			}
-			$scope.save = function(){
-				var trueSelected = [];
-				$.each($scope.selected.plans, function(key, val){
-					trueSelected.push(val.id);
-				});
-				$scope.selected.plans = trueSelected;
-				if($scope.selected.id == -1){
-					$scope.selected.id=null;
-					new Patient($scope.selected).$save().then(reload);
-				}else{
-					new Patient($scope.selected).$update().then(reload);
-				}
-				$('#add-patient').modal('hide');
-			};
-			reload();
 		}]);
 	</script>
 </head>
@@ -104,27 +71,33 @@
     		<div class="navbar-header">
       			<a class="navbar-brand" href="#"><img src="img/logo.png" />SmartMeds™</a>
     		</div>
-    		<div>
-      			<ul class="nav navbar-nav navbar-right">
-        			<li class="active"><a href="./">Login</a></li>
-        			<li><a href="./plans">Plans</a></li>
-        			<li><a href="./meds">Meds</a></li>
-      			</ul>
-    		</div>
   		</div>
 	</nav>
-	<div class="container shadow-z-2">
-		<!--<button class="btn btn-fab btn-raised btn-primary" id="absolute" ng-click="emptySelected()"><i class="mdi-content-add"></i></button>-->
+	<div class="container shadow-z-2" ng-if="!login">
 		<div id="header">
-			<h1 align="center">Patients Login</h1>
+			<h1 align="center">Patient Login</h1>
 			<div class="row">
 				<div class="col-sm-12 login" align="left">
     				<label for="uniqueid">Unique ID:</label>
-    				<input type="text" ng-model="selected.uid" class="form-control" id="uniqueid">
+    				<input type="text" class="form-control" id="uniqueid">
+					<button class="btn btn-primary" ng-click="signin()">Login</button>
 					<br>
   				</div>
 			</div>
 		</div>
+	</div>
+	<div ng-if="login">
+		<div class="container shadow-z-2">
+			<div id="header">
+				<h1 align="center">Med Schedule for [[data.name]]</h1>
+			</div>
+		</div>
+		<div ng-repeat="event in dates" class="container shadow-z-1" style="margin-top:20px;padding:20px;position:relative;">
+			<h4>[[event.med.name]]</h4><div class="pull-right">[[event.date]]</div>
+			<div class="text-muted">[[event.name]]&nbsp;|&nbsp;[[event.med.manufacturer]]</div>
+		</div>
+		<br/>
+		<br/>
 	</div>
 </body>
 </html>

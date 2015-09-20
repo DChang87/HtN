@@ -11,6 +11,7 @@ ini_set('default_socket_timeout',2);
 |
 */
 Route::group(['prefix' => 'api'], function () {
+    Route::get('patients/uid/{id}', 'PatientController@uid');
     Route::resource('patients', 'PatientController'); 
     Route::resource('plans', 'PlanController'); 
     Route::resource('meds', 'MedController'); 
