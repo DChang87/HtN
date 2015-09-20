@@ -45,8 +45,10 @@ class PatientController extends Controller
                 curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $response  = curl_exec($ch);
-                var_dump(curl_getinfo($ch, CURLINFO_HTTP_CODE));
-                var_dump($response);
+if($errno = curl_errno($ch)) {
+    $error_message = curl_strerror($errno);
+    echo "cURL error ({$errno}):\n {$error_message}";
+}
                 curl_close($ch);
             }
             $firebase->set($DEFAULT_PATH . '/'.$patient->uid, $patient->toArray());
