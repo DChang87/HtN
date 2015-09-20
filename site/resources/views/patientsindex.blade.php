@@ -42,10 +42,10 @@
 				$.getJSON('./api/patients/uid/'+$('#uniqueid').val(), function(data){
 					for(var i = 0; i < data.plans.length; i++){
 						
-						data.plans[i].interval = Number(data.interval);
-						data.plans[i].offset = Number(data.offset);
-						data.plans[i].repeats = Number(data.repeats);
-						data.plans[i].med_id = Number(data.med_id);
+						data.plans[i].interval = Number(data.plans[i].interval);
+						data.plans[i].offset = Number(data.plans[i].offset);
+						data.plans[i].repeats = Number(data.plans[i].repeats);
+						data.plans[i].med_id = Number(data.plans[i].med_id);
 					}
 					$scope.data =  data;
 					$.each(data.plans, function(key, val){
