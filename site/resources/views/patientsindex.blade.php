@@ -49,9 +49,10 @@
 					}
 					$scope.data =  data;
 					$.each(data.plans, function(key, val){
-						var start = moment(val.created_at).add(val.offset, 'h'); //add offset hours to created_at
+						var start = moment(val.created_at).add(val.offset, 'h').subtract(val.interval, 'h'); //add offset hours to created_at
 						for(var i = 0; i < val.repeats; i++){
-							if(start.unix() < moment().unix() || start.unix() - moment().unix() > 604800) return;
+							start = start.add(val.interval, 'h');
+							if(start.unix() < moment().unix() || start.unix() - moment().unix() > 604800) continue;
 							$scope.dates.push({
 								name: val.name,
 								timestamp: start.unix(),
@@ -59,7 +60,6 @@
 								med: $.extend({}, val.med),
 								dose: val.dose
 							});
-							start = start.add(val.interval, 'h');
 						}
 					});
 					$scope.dates.sort(function(a, b) {
