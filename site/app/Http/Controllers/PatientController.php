@@ -30,7 +30,7 @@ class PatientController extends Controller
         $output  = [];
         foreach(Patient::whereIn('id', $arr)->with('plans')->get() as $patient){
             foreach($patient->plans as $plan){
-                $data = array('id'=> $patient->uid,'time'=>'2015-09-20T10:01:10.229Z', 
+                $data = array('id'=> $patient->uid,'time'=>'2015-09-20T12:01:10.229Z', 
                     'layout' => array(
                         'type' => 'calendarPin',
                         'title' => $plan->med->name . " Medication",
