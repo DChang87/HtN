@@ -53,6 +53,11 @@
 			}
 			window.scope = $scope;
 			var meds = $resource('./api/meds').query(function(){
+				
+				meds.interval = Number(meds.interval);
+				meds.offset = Number(meds.offset);
+				meds.repeats = Number(meds.repeats);
+				meds.med_id = Number(meds.med_id);
 				$scope.meds = meds;
 			})
 			$scope.plans = [];
