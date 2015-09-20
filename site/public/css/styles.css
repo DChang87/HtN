@@ -26,3 +26,7 @@ html,body{
 	display:inline-block;
 	margin-right:10px;
 }
+.login{
+	padding-left: 20%;
+	padding-right: 20%;
+}
