@@ -52,7 +52,7 @@
 						var start = moment(val.created_at).add(val.offset, 'h').subtract(val.interval, 'h'); //add offset hours to created_at
 						for(var i = 0; i < val.repeats; i++){
 							start = start.add(val.interval, 'h');
-							if(start.unix() < moment().unix() || start.unix() - moment().unix() > 604800) continue;
+							if(start.unix() < moment().unix() || start.unix() - moment().unix() > 604800*1000) continue;
 							$scope.dates.push({
 								name: val.name,
 								timestamp: start.unix(),
