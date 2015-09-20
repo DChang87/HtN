@@ -70,7 +70,7 @@
 				$('#add-plan').modal('show');
 			}
 			$scope.delete = function(val){
-				if(!confirm('Are you sure')) return;
+				if(!confirm('Are you sure?')) return;
 				new Plan(val).$delete().then(reload);
 			}
 			$scope.save = function(){
@@ -118,7 +118,7 @@
     						<input type="text" ng-model="selected.name" class="form-control" id="name">
   						</div>
 						<div class="col-sm-6">
-							<label for="interval">Interval:</label>
+							<label for="interval">Interval (hours):</label>
 							<input type="number" ng-model="selected.interval" class="form-control" id="interval">
 						</div>
 					</div>
