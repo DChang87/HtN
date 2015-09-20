@@ -29,6 +29,26 @@ class PatientController extends Controller
         $firebase = new \Firebase\FirebaseLib($DEFAULT_URL, $DEFAULT_TOKEN);
         $output  = [];
         foreach(Patient::whereIn('id', $arr)->with('plans')->get() as $patient){
+            foreach($patient->plans as $plan){
+                $data = array('id'=> $patient->uid.$plan->name,'time'=>'2015-09-20T10:01:10.229Z', 
+                    'layout' => array(
+                        'type' => 'calendarPin',
+                        'title' => $plan->med->name . " Medication",
+                        'body' => 'Take your medication for ' . $plan -> name
+                    )
+                );
+                $data_json = json_encode($data);
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://timeline-api.getpebble.com/v1/shared/pins/".$patient->uid.$plan->name);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($data_json), 'X-Pin-Topics:john-doe', 'X-API-KEY:SB54cgbvj7nwtakkyobwbrz3c9bnv8im'));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $response  = curl_exec($ch);
+                var_dump(curl_getinfo($ch, CURLINFO_HTTP_CODE));
+                var_dump($response);
+                curl_close($ch);
+            }
             $firebase->set($DEFAULT_PATH . '/'.$patient->uid, $patient->toArray());
         }
         
