@@ -40,10 +40,13 @@
 			$scope.login = false;
 			$scope.signin = function(){
 				$.getJSON('./api/patients/uid/'+$('#uniqueid').val(), function(data){
-					data.interval = Number(data.interval);
-					data.offset = Number(data.offset);
-					data.repeats = Number(data.repeats);
-					data.med_id = Number(data.med_id);
+					for(var i = 0; i < data.plans.length; i++){
+						
+						data.plans[i].interval = Number(data.interval);
+						data.plans[i].offset = Number(data.offset);
+						data.plans[i].repeats = Number(data.repeats);
+						data.plans[i].med_id = Number(data.med_id);
+					}
 					$scope.data =  data;
 					$.each(data.plans, function(key, val){
 						var start = moment(val.created_at).add(val.offset, 'h'); //add offset hours to created_at
